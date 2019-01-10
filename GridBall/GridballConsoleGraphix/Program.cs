@@ -16,30 +16,113 @@ namespace GridballConsoleGraphix
 
             while(true)
             {
-                Console.Clear();
-                Console.WriteLine(DrawGame(game));
+                GameToConsole(game);
+               // if()
+                {
 
-
-                var keyPress = Console.ReadKey();
-                switch (keyPress.Key) {
-                    case ConsoleKey.W:
-                        game.ProcessCommands(new MoveTurnCommand(Point.Direction.Up), new NullTurnCommand());
-                        break;
-                    case ConsoleKey.A:
-                        game.ProcessCommands(new MoveTurnCommand(Point.Direction.Left), new NullTurnCommand());
-
-                        break;
-                    case ConsoleKey.S:
-                        game.ProcessCommands(new MoveTurnCommand(Point.Direction.Down), new NullTurnCommand());
-
-                        break;
-                    case ConsoleKey.D:
-                        game.ProcessCommands(new MoveTurnCommand(Point.Direction.Right), new NullTurnCommand());
-
-                        break;
                 }
 
+
+
+                        game.ProcessCommands(GetPlayerMove(1,game.playerA,game), new NullTurnCommand());
+
+               
                 game.FinishTurn();
+            }
+        }
+
+        static void GameToConsole(Game game)
+        {
+            Console.Clear();
+            Console.WriteLine(DrawGame(game));
+        }
+
+        static Point.Direction SelectDirection(Game g)
+        {
+            while (true) {
+                GameToConsole(g);
+                Console.WriteLine("Select direction using WASD");
+                var keyPress = Console.ReadKey();
+                switch (keyPress.Key)
+                {
+                    case ConsoleKey.W:
+                        return Point.Direction.Up;
+                    case ConsoleKey.A:
+                        return (Point.Direction.Left);
+                    case ConsoleKey.S:
+                        return (Point.Direction.Down);
+                    case ConsoleKey.D:
+                        return Point.Direction.Right;
+                }
+            }
+        }
+
+        static TurnCommand HandleThrowCommand(Game g)
+        {
+            GameToConsole(g);
+            Console.WriteLine("Select throw distance (1 (default) or 2)");
+            int throwDistance = 1;
+            var keyPress = Console.ReadKey();
+            switch (keyPress.Key)
+            {
+                case ConsoleKey.D2:
+                    throwDistance = 2;
+                    break;
+            }
+
+            return new ThrowTurnCommand(throwDistance,SelectDirection(g));
+
+        }
+
+        static TurnCommand GetPlayerMove(int turnNumber, Player player, Game game)
+        {
+            while (true)
+            {
+                GameToConsole(game);
+                Console.WriteLine("Select your action");
+                ConsoleKeyInfo keyPress;
+                if (game.b.carriedBy == player)
+                {
+                    if (turnNumber % 3 == 0)
+                    {
+
+                        Console.WriteLine("1: Throw  2: Nothing");
+                        keyPress = Console.ReadKey();
+                        switch (keyPress.Key)
+                        {
+                            case ConsoleKey.D1:
+                                return HandleThrowCommand(game);
+                            case ConsoleKey.D2:
+                                return new NullTurnCommand();
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("1: Move 2: Throw  3: Nothing");
+                        keyPress = Console.ReadKey();
+                        switch (keyPress.Key)
+                        {
+                            case ConsoleKey.D1:
+                                return new MoveTurnCommand(SelectDirection(game));
+                            case ConsoleKey.D2:
+                                return HandleThrowCommand(game);
+                            case ConsoleKey.D3:
+                                return new NullTurnCommand();
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("1: Move  2: Nothing");
+                    keyPress = Console.ReadKey();
+                    switch (keyPress.Key)
+                    {
+                        case ConsoleKey.D1:
+                            return new MoveTurnCommand(SelectDirection(game));
+                        case ConsoleKey.D2:
+                            return new NullTurnCommand();
+                    }
+                }
             }
         }
 

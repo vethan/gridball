@@ -14,6 +14,12 @@ namespace GridballCore
         public enum Direction { Up, Down, Left, Right }
 
 
+        public static Point operator *(Point one, int other)
+        {
+            return new Point(one.x * other, one.y * other);
+        }
+
+
         public static Point operator +(Point one,Point other)
         {
             return new Point(one.x + other.x, one.y + other.y);
@@ -46,6 +52,17 @@ namespace GridballCore
             this.x = x;
             this.y = y;
         }
+
+        public Point ClampTo(Point min, Point max)
+        {
+            this.x = Math.Max(this.x, min.x);
+            this.x = Math.Min(this.x, max.x);
+
+            this.y = Math.Max(this.y, min.y);
+            this.y = Math.Min(this.y, max.y);
+            return this;
+        }
+
         public override bool Equals(object obj)
         {
             return base.Equals(obj);

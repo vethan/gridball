@@ -18,6 +18,8 @@ namespace GridballCore.TurnCommands
         {
             base.Execute(p, g);
             p.Position += Point.FromDirection(direction);
+            p.Position= p.Position.ClampTo(new Point(-Game.HALF_ARENA_WIDTH, -Game.HALF_ARENA_HEIGHT),
+                new Point(Game.HALF_ARENA_WIDTH, Game.HALF_ARENA_HEIGHT));
         }
 
 
