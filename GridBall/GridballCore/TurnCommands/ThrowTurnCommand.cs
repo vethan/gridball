@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GridballCore.TurnCommands
+﻿namespace GridballCore.TurnCommands
 {
     public class ThrowTurnCommand : TurnCommand
     {
@@ -26,8 +20,19 @@ namespace GridballCore.TurnCommands
             if (!(g.b.carriedBy == p))
                 return;
 
-            
+
             g.b.Position += Point.FromDirection(direction) * distance;
+            if (g.b.Position.x < -Game.HALF_ARENA_WIDTH)
+            {
+                g.Score(false);
+                return;
+            }
+            if (g.b.Position.x > Game.HALF_ARENA_WIDTH)
+            {
+                g.Score(true);
+                return;
+            }
+
             g.b.Position = g.b.Position.ClampTo(new Point(-Game.HALF_ARENA_WIDTH, -Game.HALF_ARENA_HEIGHT),
                 new Point(Game.HALF_ARENA_WIDTH, Game.HALF_ARENA_HEIGHT));
             g.b.carriedBy = null;

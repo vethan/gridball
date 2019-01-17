@@ -10,17 +10,17 @@ namespace GridballCore
     {
         public enum Team { A, B }
 
-        Team team;
-
-        bool hadBallThisCycle = false;
         internal Point pastPosition { get; private set; }
-
+        public int movedWithBall { get; private set; } = 0;
         public void StorePastPosition()
         {
             pastPosition = Position;
         }
 
-
+        public void Reset()
+        {
+            movedWithBall = 0;
+        }
 
         public bool HasMovedThisTurn
         {
@@ -29,9 +29,16 @@ namespace GridballCore
                }
         }
 
-        public void NewCycle()
+        public void NewCycle(Ball b)
         {
-            hadBallThisCycle = false;
+            if(HasMovedThisTurn && b.carriedBy == this)
+            {
+                movedWithBall++;
+            }
+            else
+            {
+                movedWithBall = 0;
+            }
         }
     }
 }

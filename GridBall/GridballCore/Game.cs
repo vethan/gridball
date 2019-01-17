@@ -11,26 +11,78 @@ namespace GridballCore
     {
         public const int HALF_ARENA_WIDTH = 8;
         public const int HALF_ARENA_HEIGHT = 8;
-        int cycleLength = 3;
-        int ballCarrierMoves = 2;
+        public const int ballCarrierMoves = 2;
         public Player playerA;
         public Player playerB;
         public Ball b;
         public readonly static Random random = new Random();
+        public const int HALF_TURNS = 42;
+        public int  turnCounter {
+            get;
+            private set;
+            }= 1;
+        internal void Score(bool teamAScored)
+        {
+            int aScored = teamAScored ? 1 : 0;
+
+            aScore += aScored;
+            bScore += 1 - aScored;
+
+            ResetPositions(!teamAScored);
+        }
+
+        public int turnsLeft
+        {
+            get;
+            private set;
+        }
+
+        public int aScore
+        {
+            get;
+            private set;
+        }
+
+        public int bScore
+        {
+            get;
+            private set;
+        }
+        public bool secondHalf
+        {
+            get;
+            private set;
+        }
+
+
+
+        public void ResetPositions(bool playerAdvantageA)
+        {
+            playerA.Reset();
+            playerB.Reset();
+            playerA.Position = new Point(-2, 0);
+            playerB.Position = new Point(2, 0);
+            Player advantagePlayer = playerAdvantageA ? playerA : playerB;
+            b.Position = advantagePlayer.Position;
+            b.carriedBy = advantagePlayer;
+        }
 
         public Game()
         {
             playerA = new Player();
-            playerA.Position = new Point(-2, 0);
 
             playerB = new Player();
-            playerB.Position = new Point(2, 0);
 
             b = new Ball();
+
+            ResetPositions(true);
+            turnsLeft = HALF_TURNS;
+            turnCounter = 1;
         }
 
         public void ProcessCommands(TurnCommand playerACommand, TurnCommand playerBCommand)
         {
+
             switch(playerACommand.CompareTo(playerACommand))
             {
                 case -1:
@@ -47,6 +99,8 @@ namespace GridballCore
             {
                 b.Position = b.carriedBy.Position;
             }
+
+            FinishTurn();
         }
 
         Point BumpBall()
@@ -115,7 +169,7 @@ namespace GridballCore
             tacklee.Position = FindBargePosition(tackler, tacklee);
         }
 
-        public void FinishTurn()
+        void FinishTurn()
         {
             if(playerA.Position.Equals(playerB.Position))
             {
@@ -161,6 +215,25 @@ namespace GridballCore
                     b.carriedBy = playerB;
                 }
             }
+            playerA.NewCycle(b);
+            playerB.NewCycle(b);
+            turnsLeft--;
+            turnCounter++;
+ 
+            if (turnsLeft < 0)
+            {
+                if(secondHalf)
+                {
+                    //FINISH GAME
+                }
+                else
+                {
+                    ResetPositions(false);
+                    secondHalf = true;
+                    turnsLeft = HALF_TURNS;
+                }
+            }
+            
         }
 
     }

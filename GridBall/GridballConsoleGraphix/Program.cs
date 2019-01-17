@@ -17,17 +17,7 @@ namespace GridballConsoleGraphix
             while(true)
             {
                 GameToConsole(game);
-               // if()
-                {
-
-                }
-
-
-
-                        game.ProcessCommands(GetPlayerMove(1,game.playerA,game), new NullTurnCommand());
-
-               
-                game.FinishTurn();
+                game.ProcessCommands(GetPlayerMove(1,game.playerA,game), new NullTurnCommand());               
             }
         }
 
@@ -83,7 +73,7 @@ namespace GridballConsoleGraphix
                 ConsoleKeyInfo keyPress;
                 if (game.b.carriedBy == player)
                 {
-                    if (turnNumber % 3 == 0)
+                    if (player.movedWithBall >= Game.ballCarrierMoves)
                     {
 
                         Console.WriteLine("1: Throw  2: Nothing");
@@ -128,7 +118,21 @@ namespace GridballConsoleGraphix
 
         static string DrawGame(Game game)
         {
+            
             StringBuilder sb = new StringBuilder();
+            sb.Append(game.secondHalf ? "Second Half." : "First Half.");
+            if(game.turnsLeft == 0)
+            {
+                sb.Append(" Last Turn");
+            } else if(game.turnsLeft == 1)
+            {
+                sb.Append(" 1 Turn Left");
+            } else
+            {
+                sb.AppendFormat(" {0} Turns Left\n  A: {1} - {2} :B",game.turnsLeft,game.aScore,game.bScore);
+            }
+
+            sb.Append("\n");
             for (int i = 0; i < 2 * Game.HALF_ARENA_WIDTH + 3; i++)
                 sb.Append("=");
 
