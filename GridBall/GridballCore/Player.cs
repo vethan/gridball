@@ -12,6 +12,7 @@ namespace GridballCore
 
         internal Point pastPosition { get; private set; }
         public int movedWithBall { get; private set; } = 0;
+        public bool freshPickup = false;
         public void StorePastPosition()
         {
             pastPosition = Position;
@@ -31,7 +32,7 @@ namespace GridballCore
 
         public void NewCycle(Ball b)
         {
-            if(HasMovedThisTurn && b.carriedBy == this)
+            if(HasMovedThisTurn && b.carriedBy == this && !freshPickup)
             {
                 movedWithBall++;
             }
@@ -39,6 +40,7 @@ namespace GridballCore
             {
                 movedWithBall = 0;
             }
+            freshPickup = false;
         }
     }
 }

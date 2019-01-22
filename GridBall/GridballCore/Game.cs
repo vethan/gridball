@@ -165,7 +165,7 @@ namespace GridballCore
             Player tackler = tacklee == playerA ? playerB : playerA;
 
             b.carriedBy = tackler;
-
+            tackler.freshPickup = true;
             tacklee.Position = FindBargePosition(tackler, tacklee);
         }
 
@@ -208,11 +208,15 @@ namespace GridballCore
                 if(playerA.Position.Equals(b.Position))
                 {
                     b.carriedBy = playerA;
+                    playerA.freshPickup = true;
+
                 }
 
                 if (playerB.Position.Equals(b.Position))
                 {
                     b.carriedBy = playerB;
+                    playerB.freshPickup = true;
+
                 }
             }
             playerA.NewCycle(b);

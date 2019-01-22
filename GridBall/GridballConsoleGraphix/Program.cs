@@ -13,12 +13,43 @@ namespace GridballConsoleGraphix
         static void Main(string[] args)
         {
             GridballCore.Game game = new GridballCore.Game();
+            bool gameSetup = false;
+            bool singlePlayer = false;
+            while(!gameSetup)
+            {
+                Console.WriteLine("1: Single-player  2: Multi-player");
+                var keyPress = Console.ReadKey();
+                switch (keyPress.Key)
+                {
+                    case ConsoleKey.D1:
+                        gameSetup = true;
+                        singlePlayer = true;
+                        break;
+                    case ConsoleKey.D2:
+                        gameSetup = true;
+                        break;
+                }
+                Console.Clear();
+                if(!gameSetup)
+                {
+                    Console.WriteLine("Press 1 or 2");
+                }
+            }
 
-            while(true)
+
+            while (true)
             {
                 GameToConsole(game);
-                game.ProcessCommands(GetPlayerMove(1,game.playerA,game), new NullTurnCommand());               
+                game.ProcessCommands(
+                    GetPlayerMove("A",game.playerA,game),
+                    singlePlayer ? GetAIMove() : GetPlayerMove("B", game.playerB, game)
+                    );               
             }
+        }
+
+        static TurnCommand GetAIMove()
+        {
+            return new NullTurnCommand();
         }
 
         static void GameToConsole(Game game)
@@ -64,12 +95,12 @@ namespace GridballConsoleGraphix
 
         }
 
-        static TurnCommand GetPlayerMove(int turnNumber, Player player, Game game)
+        static TurnCommand GetPlayerMove(String playerId, Player player, Game game)
         {
             while (true)
             {
                 GameToConsole(game);
-                Console.WriteLine("Select your action");
+                Console.WriteLine("Player {0}: Select your action", playerId);
                 ConsoleKeyInfo keyPress;
                 if (game.b.carriedBy == player)
                 {
