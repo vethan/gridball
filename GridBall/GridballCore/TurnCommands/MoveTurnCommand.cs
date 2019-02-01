@@ -32,7 +32,7 @@
         }
 
 
-        Point.Direction direction;
+        public Point.Direction direction { get; private set; }
 
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GridballConsoleGraphix
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -52,7 +52,7 @@ namespace GridballConsoleGraphix
             return new NullTurnCommand();
         }
 
-        static void GameToConsole(Game game)
+        public static void GameToConsole(Game game)
         {
             Console.Clear();
             Console.WriteLine(DrawGame(game));
@@ -147,17 +147,17 @@ namespace GridballConsoleGraphix
             }
         }
 
-        static string DrawGame(Game game)
+        public static string DrawGame(Game game)
         {
             
             StringBuilder sb = new StringBuilder();
             sb.Append(game.secondHalf ? "Second Half." : "First Half.");
             if(game.turnsLeft == 0)
             {
-                sb.Append(" Last Turn");
+                sb.AppendFormat(" Last Turn\n  A: {1} - {2} :B", game.aScore, game.bScore);
             } else if(game.turnsLeft == 1)
             {
-                sb.Append(" 1 Turn Left");
+                sb.AppendFormat(" 1 Turn Left\n  A: {1} - {2} :B", game.aScore, game.bScore);
             } else
             {
                 sb.AppendFormat(" {0} Turns Left\n  A: {1} - {2} :B",game.turnsLeft,game.aScore,game.bScore);

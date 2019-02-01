@@ -2,7 +2,7 @@
 {
     public class ThrowTurnCommand : TurnCommand
     {
-        Point.Direction direction;
+        public Point.Direction direction { get; private set; }
         int distance;
 
         protected override int Priority => 1;
