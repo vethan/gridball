@@ -55,6 +55,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\RakNet-C-Sharp-binding-project\RakNetDotNet\RakNetDotNet\RakNetDotNet.csproj">
+      <Project>{7c9a7b44-0b7a-4b04-a08e-0ab22c4e7cbf}</Project>
+      <Name>RakNetDotNet</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GridballConsoleGraphix\GridballConsoleGraphix.csproj">
       <Project>{0650dd1e-f189-4b47-8ee3-7153719b6bb1}</Project>
       <Name>GridballConsoleGraphix</Name>

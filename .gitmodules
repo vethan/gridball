@@ -1,0 +1,3 @@
+[submodule "RakNet-C-Sharp-binding-project"]
+	path = RakNet-C-Sharp-binding-project
+	url = git@github.com:Siroro/RakNet-C-Sharp-binding-project.git
