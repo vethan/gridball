@@ -1,5 +1,8 @@
-﻿using RakNet;
+﻿using GridballCore.TurnCommands;
+using RakNet;
 using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace GridBallRealtimeConsole
 {
@@ -10,7 +13,26 @@ namespace GridBallRealtimeConsole
         const int BIG_PACKET_SIZE = 103296250;
         string ip = string.Empty;
 
-        public void HandlePacketUpdates()
+        byte typeToInt(TurnCommand command)
+        {
+            if(command is MoveTurnCommand)
+            {
+                return 1;
+            }
+            
+            if(command is ThrowTurnCommand)
+            {
+                return 2;
+            }
+            if(command is NullTurnCommand)
+            {
+                return 3;
+            }
+            throw new NotImplementedException();
+        }
+
+
+        public void HandlePacketUpdates(int frame, TurnCommand myTurnCommand)
         {
             Packet packet = new Packet();
             byte[] text;
@@ -23,8 +45,13 @@ namespace GridBallRealtimeConsole
                     if ((DefaultMessageIDTypes)packet.data[0] == DefaultMessageIDTypes.ID_NEW_INCOMING_CONNECTION || packet.data[0] == (int)253)
                     {
                         Console.WriteLine("Starting send");
-
-                        text[0] = (byte)255;
+                        MemoryStream ms = new MemoryStream();
+                        ms.WriteByte(255);
+                        ms.WriteByte(typeToInt(myTurnCommand));
+                        var binaryFormatter = new BinaryFormatter();
+                        binaryFormatter.Serialize(ms, myTurnCommand);
+                 
+                        
                         DefaultMessageIDTypes idtype = (DefaultMessageIDTypes)packet.data[0];
                         if (idtype == DefaultMessageIDTypes.ID_CONNECTION_LOST)
                             Console.WriteLine("ID_CONNECTION_LOST from {0}", packet.systemAddress.ToString());
@@ -136,6 +163,7 @@ namespace GridBallRealtimeConsole
             else if (ch == 's')
             {
                 server = RakPeerInterface.GetInstance();
+                server.SetMaximumIncomingConnections(1); //1v1 yo!
                 Console.WriteLine("Working as server");
             }
             else
@@ -198,6 +226,18 @@ namespace GridBallRealtimeConsole
             {
                 Console.WriteLine("{0}. {1}", (i + 1).ToString(), rakPeer.GetLocalIP(i).ToString());
             }
+
+            if(server != null)
+            {
+                Console.WriteLine("Waiting for client...");
+                while (server.NumberOfConnections() == 0)
+                {
+                    System.Threading.Thread.Sleep(500);
+
+                }
+                Console.WriteLine("Client connected!");
+            }
+
 
         }
     }

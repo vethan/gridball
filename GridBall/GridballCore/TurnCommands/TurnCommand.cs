@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GridballCore.TurnCommands
 {
+    [Serializable]
     public abstract class TurnCommand : IComparable<TurnCommand>
     {
         public int CompareTo(TurnCommand other)
@@ -23,4 +24,6 @@ namespace GridballCore.TurnCommands
             get;
         }
     }
+
+
 }
