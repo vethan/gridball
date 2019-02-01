@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="InputHandler.cs" />
     <Compile Include="KeyState.cs" />
+    <Compile Include="NetworkInterface.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -67,6 +68,11 @@
       <Project>{61ecb073-0563-4668-bd96-f793bd4dda4a}</Project>
       <Name>GridballCore</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="RakNet.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

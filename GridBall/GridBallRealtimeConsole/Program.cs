@@ -16,6 +16,10 @@ namespace GridBallRealtimeConsole
         [STAThread]
         static void Main(string[] args)
         {
+            NetworkInterface ni = new NetworkInterface();
+            ni.SetupNetworkInterface();
+
+            Console.Clear();
             InputHandler ih = new InputHandler(Key.W, Key.A, Key.S, Key.D, Key.J, Key.K, Key.L, Key.I, Key.D1, Key.D2);
             Stopwatch stopWatch = new Stopwatch();
             TurnCommand current = new NullTurnCommand();
