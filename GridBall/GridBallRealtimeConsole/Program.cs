@@ -16,8 +16,9 @@ namespace GridBallRealtimeConsole
         [STAThread]
         static void Main(string[] args)
         {
-            NetworkInterface ni = new NetworkInterface();
-            ni.SetupNetworkInterface();
+            //IOpponent ni = new NetworkOpponent();
+            IOpponent ni = new XInputOpponent();
+            ni.SetupOpponent();
 
             Console.Clear();
             InputHandler ih = new InputHandler(Key.W, Key.A, Key.S, Key.D, Key.J, Key.K, Key.L, Key.I, Key.D1, Key.D2);
@@ -46,6 +47,7 @@ namespace GridBallRealtimeConsole
                 var deltaTime = stopWatch.Elapsed.TotalMilliseconds;
                 stopWatch.Restart();
                 ih.HandleInput();
+                ni.HandleInput();
                 if(current is NullTurnCommand)
                 {
                     current = GenerateTurnCommand(ih, commandMap);
@@ -55,9 +57,9 @@ namespace GridBallRealtimeConsole
                 {
                     timePassed -= frameLength;
                     Console.WriteLine("Waiting for opponent data....");
-                    TurnCommand opponentCommand = ni.HandlePacketUpdates(frameCounter, current);
+                    TurnCommand opponentCommand = ni.HandleOpponentUpdate(frameCounter, current);
                     frameCounter++;
-                    g.ProcessCommands(ni.isServer? current : opponentCommand, ni.isServer ? opponentCommand : current);
+                    g.ProcessCommands(ni.localIsPlayerOne ? current : opponentCommand, ni.localIsPlayerOne ? opponentCommand : current);
                     //GridballConsoleGraphix.Program.GameToConsole(g);
                     current = new NullTurnCommand();
                     Console.Clear();
@@ -92,7 +94,7 @@ namespace GridBallRealtimeConsole
 
         private static TurnCommand GenerateTurnCommand(InputHandler ih, Dictionary<Key, TurnCommand> commandMap)
         {
-            foreach(var kvp in  commandMap)
+            foreach(var kvp in commandMap)
             {
                 if (ih.GetKeyState(kvp.Key).pressed)
                     return kvp.Value;

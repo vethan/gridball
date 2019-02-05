@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 namespace GridBallRealtimeConsole
 {
-    class InputHandler
+    public class InputHandler 
     {
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
         private static extern IntPtr GetForegroundWindow();

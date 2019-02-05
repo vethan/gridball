@@ -7,50 +7,29 @@ using System.Threading;
 
 namespace GridBallRealtimeConsole
 {
-    class NetworkInterface
+    class NetworkOpponent : IOpponent
     {
         public const short AF_INET = 2;
         RakPeerInterface client, server;
         RakPeerInterface rakPeer;
-        const int BIG_PACKET_SIZE = 103296250;
         string ip = string.Empty;
-        internal bool isServer {
-            get
-            {
-                return server != null;
-            }
-        }
+        public bool localIsPlayerOne => server != null;
 
-        byte typeToInt(TurnCommand command)
+        public void HandleInput()
         {
-            if(command is MoveTurnCommand)
-            {
-                return 1;
-            }
             
-            if(command is ThrowTurnCommand)
-            {
-                return 2;
-            }
-            if(command is NullTurnCommand)
-            {
-                return 3;
-            }
-            throw new NotImplementedException();
         }
 
-
-        public TurnCommand HandlePacketUpdates(byte frame, TurnCommand myTurnCommand)
+        public TurnCommand HandleOpponentUpdate(byte frame, TurnCommand myTurnCommand)
         {
             Packet packet = new Packet();
             byte[] text;
-            text = new byte[BIG_PACKET_SIZE];
+            text = new byte[1024];
             var binaryFormatter = new BinaryFormatter();
 
             MemoryStream ms = new MemoryStream();
             ms.WriteByte(255);
             ms.WriteByte(frame);
-            ms.WriteByte(typeToInt(myTurnCommand));
             binaryFormatter.Serialize(ms, myTurnCommand);
             rakPeer.Send(ms.ToArray(), (int)ms.Position, PacketPriority.MEDIUM_PRIORITY, PacketReliability.RELIABLE_ORDERED, (char)1, RakNet.RakNet.UNASSIGNED_SYSTEM_ADDRESS, true);
             RakPeerInterface reciever = rakPeer;
@@ -63,7 +42,7 @@ namespace GridBallRealtimeConsole
                 if (packet != null  && packet.data[0] == 255 && packet.data[1] == frame)
                 {
                     MemoryStream readStream = new MemoryStream(packet.data);
-                    readStream.Position = 3;
+                    readStream.Position = 2;
                     var turn = (TurnCommand)binaryFormatter.Deserialize(readStream);
                     reciever.DeallocatePacket(packet);
                     return turn;
@@ -79,16 +58,10 @@ namespace GridBallRealtimeConsole
             }
         }
 
-        public void SetupNetworkInterface()
+        public void SetupOpponent()
         {
-            bool quit;
-            bool sentPacket = false;
-            byte[] text;
-            string message;
-            client = server = null;
 
-            text = new byte[BIG_PACKET_SIZE];
-            quit = false;
+            string message;
             char ch;
 
             Console.WriteLine("Enter 's' to run as server, 'c' to run as client, space to run local.");

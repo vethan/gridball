@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GridBallRealtimeConsole
 {
-    class KeyState
+    public class KeyState
     {
         public bool pressed { get { return !lastFrameState && isDown; } }
         public bool released { get { return lastFrameState && !isDown; } }
