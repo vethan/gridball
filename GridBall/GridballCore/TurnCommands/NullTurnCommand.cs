@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GridballCore.TurnCommands
 {
+    [Serializable]
     public class NullTurnCommand : TurnCommand
     {
         protected override int Priority => 3;

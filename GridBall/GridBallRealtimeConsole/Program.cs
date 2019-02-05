@@ -38,7 +38,7 @@ namespace GridBallRealtimeConsole
             };
 
             double frameLength = 500;
-            int frameCounter = 0;
+            byte frameCounter = 0;
             double timePassed = 0;
             //Core Event Loop;
             while (true)
@@ -54,10 +54,13 @@ namespace GridBallRealtimeConsole
                 if(timePassed >= frameLength)
                 {
                     timePassed -= frameLength;
+                    Console.WriteLine("Waiting for opponent data....");
+                    TurnCommand opponentCommand = ni.HandlePacketUpdates(frameCounter, current);
                     frameCounter++;
-                    g.ProcessCommands(current,new NullTurnCommand());
+                    g.ProcessCommands(ni.isServer? current : opponentCommand, ni.isServer ? opponentCommand : current);
                     //GridballConsoleGraphix.Program.GameToConsole(g);
                     current = new NullTurnCommand();
+                    Console.Clear();
                 }
                 Draw(g, current, frameLength-timePassed);
 

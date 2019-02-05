@@ -1,5 +1,8 @@
-﻿namespace GridballCore.TurnCommands
+﻿using System;
+
+namespace GridballCore.TurnCommands
 {
+    [Serializable]
     public class MoveTurnCommand : TurnCommand
     {
 
@@ -24,13 +27,11 @@
                     g.Score(true);
                     return;
                 }
-
-
+            }
                 p.Position = p.Position.ClampTo(new Point(-Game.HALF_ARENA_WIDTH, -Game.HALF_ARENA_HEIGHT),
     new Point(Game.HALF_ARENA_WIDTH, Game.HALF_ARENA_HEIGHT));
-            }
+            
         }
-
 
         public Point.Direction direction { get; private set; }
 

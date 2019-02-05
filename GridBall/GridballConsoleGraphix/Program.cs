@@ -154,10 +154,10 @@ namespace GridballConsoleGraphix
             sb.Append(game.secondHalf ? "Second Half." : "First Half.");
             if(game.turnsLeft == 0)
             {
-                sb.AppendFormat(" Last Turn\n  A: {1} - {2} :B", game.aScore, game.bScore);
+                sb.AppendFormat(" Last Turn\n  A: {0} - {1} :B", game.aScore, game.bScore);
             } else if(game.turnsLeft == 1)
             {
-                sb.AppendFormat(" 1 Turn Left\n  A: {1} - {2} :B", game.aScore, game.bScore);
+                sb.AppendFormat(" 1 Turn Left\n  A: {0} - {1} :B", game.aScore, game.bScore);
             } else
             {
                 sb.AppendFormat(" {0} Turns Left\n  A: {1} - {2} :B",game.turnsLeft,game.aScore,game.bScore);

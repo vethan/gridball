@@ -1,9 +1,12 @@
-﻿namespace GridballCore.TurnCommands
+﻿using System;
+
+namespace GridballCore.TurnCommands
 {
+    [Serializable]
     public class ThrowTurnCommand : TurnCommand
     {
         public Point.Direction direction { get; private set; }
-        int distance;
+        public int distance;
 
         protected override int Priority => 1;
         public ThrowTurnCommand(int distance, Point.Direction direction)

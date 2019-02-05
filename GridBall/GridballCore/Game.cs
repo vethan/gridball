@@ -83,7 +83,7 @@ namespace GridballCore
         public void ProcessCommands(TurnCommand playerACommand, TurnCommand playerBCommand)
         {
 
-            switch(playerACommand.CompareTo(playerACommand))
+            switch(playerACommand.CompareTo(playerBCommand))
             {
                 case -1:
                     playerBCommand.Execute(playerB, this);
