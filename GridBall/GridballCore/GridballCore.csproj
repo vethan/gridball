@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AI\GridballAIAgent.cs" />
     <Compile Include="Ball.cs" />
     <Compile Include="HashCode.cs" />
     <Compile Include="TurnCommands\NullTurnCommand.cs" />

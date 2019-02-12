@@ -15,6 +15,8 @@ namespace GridballCore
         public Player playerA;
         public Player playerB;
         public Ball b;
+        public bool gameDone { get; private set; } = false;
+        private bool scoreHappened;
         public readonly static Random random = new Random();
         public const int HALF_TURNS = 42;
         public int  turnCounter {
@@ -23,6 +25,7 @@ namespace GridballCore
             }= 1;
         internal void Score(bool teamAScored)
         {
+            scoreHappened = true;
             int aScored = teamAScored ? 1 : 0;
 
             aScore += aScored;
@@ -69,6 +72,7 @@ namespace GridballCore
 
         public Game()
         {
+            
             playerA = new Player();
 
             playerB = new Player();
@@ -82,15 +86,21 @@ namespace GridballCore
 
         public void ProcessCommands(TurnCommand playerACommand, TurnCommand playerBCommand)
         {
-
+            if (gameDone)
+                return;
+            scoreHappened = false;
             switch(playerACommand.CompareTo(playerBCommand))
             {
                 case -1:
                     playerBCommand.Execute(playerB, this);
+                    if (scoreHappened)
+                        return;
                     playerACommand.Execute(playerA, this);
                     break;
                 default:
                     playerACommand.Execute(playerA, this);
+                    if (scoreHappened)
+                        return;
                     playerBCommand.Execute(playerB, this);
                     break;
             }
@@ -228,7 +238,7 @@ namespace GridballCore
             {
                 if(secondHalf)
                 {
-                    //FINISH GAME
+                    gameDone = true;
                 }
                 else
                 {

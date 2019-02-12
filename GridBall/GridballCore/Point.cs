@@ -13,6 +13,11 @@ namespace GridballCore
 
         public enum Direction { Up, Down, Left, Right }
 
+        public static int TurnDistance(Point a,Point b)
+        {
+            return Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
+        }
+        
 
         public static Point operator *(Point one, int other)
         {

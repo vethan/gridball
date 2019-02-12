@@ -1,4 +1,5 @@
 ﻿using GridballCore;
+using GridballCore.AI;
 using GridballCore.TurnCommands;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,9 @@ namespace GridBallRealtimeConsole
         static void Main(string[] args)
         {
             //IOpponent ni = new NetworkOpponent();
-            IOpponent ni = new XInputOpponent();
+            //IOpponent ni = new XInputOpponent();
+            IOpponent ni = new NullOpponent();
+
             ni.SetupOpponent();
 
             Console.Clear();
@@ -25,6 +28,9 @@ namespace GridBallRealtimeConsole
             Stopwatch stopWatch = new Stopwatch();
             TurnCommand current = new NullTurnCommand();
             Game g = new Game();
+            GridballAIAgent AIPlayer2 = new GridballAIAgent(g,g.playerB,Point.Direction.Left);
+            GridballAIAgent AIPlayer1 = new GridballAIAgent(g, g.playerA, Point.Direction.Right);
+
             Dictionary<Key, TurnCommand> commandMap = new Dictionary<Key, TurnCommand>
             {
                 [Key.W] = new MoveTurnCommand(GridballCore.Point.Direction.Up),
@@ -59,8 +65,8 @@ namespace GridBallRealtimeConsole
                     Console.WriteLine("Waiting for opponent data....");
                     TurnCommand opponentCommand = ni.HandleOpponentUpdate(frameCounter, current);
                     frameCounter++;
-                    g.ProcessCommands(ni.localIsPlayerOne ? current : opponentCommand, ni.localIsPlayerOne ? opponentCommand : current);
-                    //GridballConsoleGraphix.Program.GameToConsole(g);
+                    //g.ProcessCommands(ni.localIsPlayerOne ? current : opponentCommand, ni.localIsPlayerOne ? opponentCommand : current);
+                     g.ProcessCommands(AIPlayer1.DoMove(), AIPlayer2.DoMove());
                     current = new NullTurnCommand();
                     Console.Clear();
                 }
